@@ -3,9 +3,18 @@ import DashboardLayout from '@/components/layout/DashboardLayout';
 import { mockProduce } from '@/data/mockData';
 import { Produce, Branch } from '@/types/karibu';
 import { useAuth } from '@/contexts/AuthContext';
-import { Package, Search, Filter, AlertTriangle } from 'lucide-react';
+import { Package, Search, Filter, AlertTriangle, Download, FileText, FileSpreadsheet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
+import { exportInventoryToPDF, exportInventoryToCSV } from '@/utils/exportUtils';
+import { toast } from 'sonner';
 
 const Inventory = () => {
   const { user } = useAuth();
@@ -27,6 +36,16 @@ const Inventory = () => {
     }).format(amount);
   };
 
+  const handleExport = (format: 'pdf' | 'csv') => {
+    try {
+      // Export filtered produce based on current filters
+      format === 'pdf' ? exportInventoryToPDF(filteredProduce) : exportInventoryToCSV(filteredProduce);
+      toast.success(`Inventory report exported as ${format.toUpperCase()}!`);
+    } catch (error) {
+      toast.error('Failed to export. Please try again.');
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -38,12 +57,35 @@ const Inventory = () => {
               Manage your produce stock across branches
             </p>
           </div>
-          {user?.role === 'manager' && (
-            <Button variant="hero" size="lg">
-              <Package className="h-5 w-5" />
-              Add Produce
-            </Button>
-          )}
+          <div className="flex gap-3">
+            {/* Export Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="lg" className="gap-2">
+                  <Download className="h-5 w-5" />
+                  Export
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => handleExport('pdf')} className="gap-2">
+                  <FileText className="h-4 w-4" />
+                  Export as PDF
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => handleExport('csv')} className="gap-2">
+                  <FileSpreadsheet className="h-4 w-4" />
+                  Export as CSV
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
+            {user?.role === 'manager' && (
+              <Button variant="hero" size="lg">
+                <Package className="h-5 w-5" />
+                Add Produce
+              </Button>
+            )}
+          </div>
         </div>
 
         {/* Filters */}

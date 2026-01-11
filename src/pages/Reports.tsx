@@ -1,8 +1,27 @@
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { mockProduce, mockSales, mockCreditSales, getDashboardStats } from '@/data/mockData';
-import { BarChart3, TrendingUp, Package, DollarSign, Building2 } from 'lucide-react';
+import { BarChart3, TrendingUp, Package, DollarSign, Building2, Download, FileText, FileSpreadsheet } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from '@/components/ui/dropdown-menu';
+import {
+  exportInventoryToPDF,
+  exportInventoryToCSV,
+  exportSalesToPDF,
+  exportSalesToCSV,
+  exportCreditSalesToPDF,
+  exportCreditSalesToCSV,
+  exportFullReportToPDF,
+} from '@/utils/exportUtils';
+import { toast } from 'sonner';
 
 const Reports = () => {
   const { user } = useAuth();
@@ -15,6 +34,23 @@ const Reports = () => {
       minimumFractionDigits: 0,
       notation: 'compact',
     }).format(amount);
+  };
+
+  const handleExport = (type: 'inventory' | 'sales' | 'credit' | 'full', format: 'pdf' | 'csv') => {
+    try {
+      if (type === 'inventory') {
+        format === 'pdf' ? exportInventoryToPDF(mockProduce) : exportInventoryToCSV(mockProduce);
+      } else if (type === 'sales') {
+        format === 'pdf' ? exportSalesToPDF(mockSales) : exportSalesToCSV(mockSales);
+      } else if (type === 'credit') {
+        format === 'pdf' ? exportCreditSalesToPDF(mockCreditSales) : exportCreditSalesToCSV(mockCreditSales);
+      } else if (type === 'full') {
+        exportFullReportToPDF(mockProduce, mockSales, mockCreditSales);
+      }
+      toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} report exported successfully!`);
+    } catch (error) {
+      toast.error('Failed to export report. Please try again.');
+    }
   };
 
   // Aggregate data by branch
@@ -44,7 +80,7 @@ const Reports = () => {
     <DashboardLayout>
       <div className="space-y-8">
         {/* Header */}
-        <div className="animate-fade-in">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between animate-fade-in">
           <div className="flex items-center gap-4">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-hero text-primary-foreground">
               <BarChart3 className="h-7 w-7" />
@@ -59,6 +95,61 @@ const Reports = () => {
               </p>
             </div>
           </div>
+          
+          {/* Export Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="hero" size="lg" className="gap-2">
+                <Download className="h-5 w-5" />
+                Export Reports
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>Export Options</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              
+              <DropdownMenuItem onClick={() => handleExport('full', 'pdf')} className="gap-2">
+                <FileText className="h-4 w-4 text-karibu-green-600" />
+                Complete Report (PDF)
+              </DropdownMenuItem>
+              
+              <DropdownMenuSeparator />
+              
+              <DropdownMenuLabel className="text-xs text-muted-foreground">Inventory</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => handleExport('inventory', 'pdf')} className="gap-2">
+                <FileText className="h-4 w-4" />
+                Inventory Report (PDF)
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleExport('inventory', 'csv')} className="gap-2">
+                <FileSpreadsheet className="h-4 w-4" />
+                Inventory Report (CSV)
+              </DropdownMenuItem>
+              
+              <DropdownMenuSeparator />
+              
+              <DropdownMenuLabel className="text-xs text-muted-foreground">Sales</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => handleExport('sales', 'pdf')} className="gap-2">
+                <FileText className="h-4 w-4" />
+                Sales Report (PDF)
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleExport('sales', 'csv')} className="gap-2">
+                <FileSpreadsheet className="h-4 w-4" />
+                Sales Report (CSV)
+              </DropdownMenuItem>
+              
+              <DropdownMenuSeparator />
+              
+              <DropdownMenuLabel className="text-xs text-muted-foreground">Credit Sales</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => handleExport('credit', 'pdf')} className="gap-2">
+                <FileText className="h-4 w-4" />
+                Credit Sales Report (PDF)
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleExport('credit', 'csv')} className="gap-2">
+                <FileSpreadsheet className="h-4 w-4" />
+                Credit Sales Report (CSV)
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {/* Summary Cards */}
