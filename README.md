@@ -24,31 +24,18 @@ Karibu Groceries LTD (KGL) is a wholesale produce distributor specializing in ce
 
 
 ### 2. Sales Management
-
-* 
 **Inventory Tracking**: Automatically reduces stock tonnage whenever a sale is recorded.
-
-
 * 
 **Availability Checks**: Only products currently in stock can be sold; the system notifies the manager when items run out.
-
-
 * 
 **Sales Records**: Captures buyer details, amount paid, and the identity of the sales agent.
 
-
-
 ### 3. Credit & Deferred Payments
-
 * 
 **Trusted Buyers**: Allows for separate recording of produce taken on credit.
-
-
 * 
 **Legal Documentation**: Requires the buyer's National ID (NIN), location, contact, amount due, and the specific due date.
-
-
-
+  
 ---
 
 ## User Roles & Permissions
@@ -71,16 +58,10 @@ Karibu Groceries LTD (KGL) is a wholesale produce distributor specializing in ce
 
 * 
 **Pricing**: Sales prices are pre-set by the manager and pre-populated for agents.
-
-
 * 
 **Branch Access**: Agents record sales only at their respective assigned branch.
-
-
 * 
 **Role Integrity**: No sales agent is allowed to record any produce entry/procurement.
-
-
 
 ---
 
@@ -88,23 +69,18 @@ Karibu Groceries LTD (KGL) is a wholesale produce distributor specializing in ce
 
 * 
 **Frontend**: HTML, CSS, JavaScript.
-
-
+  
 * 
 **Backend**: Node.js (Express.js).
 
-
 * 
 **Database**: MongoDB.
-
-
 
 ## Project Constraints
 
 * 
 **Duration**: The project is designed to be implemented individually over 6 weeks.
-
-
+  
 * 
 **Accessibility**: The solution must be a web-based system accessible via modern browsers.
 
