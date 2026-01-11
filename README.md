@@ -1,73 +1,110 @@
-# Welcome to your Lovable project
+# KGL Groceries LTD Management System
 
-## Project info
+## Project Overview
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Karibu Groceries LTD (KGL) is a wholesale produce distributor specializing in cereals like beans, grain maize, cow peas, G-nuts, and soybeans. The company operates two branches in different locations. This project aims to transition KGL from manual record-keeping in "black books" to a digital software solution that automates procurement, sales, and credit tracking.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## Core Features
 
-**Use Lovable**
+### 1. Produce Procurement
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+* 
+**Sourcing**: Records produce obtained from individual dealers (minimum 1000kg), other companies, and KGL’s private farms in Maganjo and Matugga.
 
-Changes made via Lovable will be committed automatically to this repo.
 
-**Use your preferred IDE**
+* 
+**Detailed Logs**: Captures name, type, date, time, tonnage (kg), cost (UgX), dealer name, contact, and sales price.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+* 
+**Input Validation**: Ensures produce types use alphabets only (min 2 characters) and tonnage/cost meet specific numeric lengths.
 
-Follow these steps:
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### 2. Sales Management
 
-# Step 3: Install the necessary dependencies.
-npm i
+* 
+**Inventory Tracking**: Automatically reduces stock tonnage whenever a sale is recorded.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
 
-**Edit a file directly in GitHub**
+* 
+**Availability Checks**: Only products currently in stock can be sold; the system notifies the manager when items run out.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
 
-**Use GitHub Codespaces**
+* 
+**Sales Records**: Captures buyer details, amount paid, and the identity of the sales agent.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
 
-## What technologies are used for this project?
 
-This project is built with:
+### 3. Credit & Deferred Payments
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+* 
+**Trusted Buyers**: Allows for separate recording of produce taken on credit.
 
-## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+* 
+**Legal Documentation**: Requires the buyer's National ID (NIN), location, contact, amount due, and the specific due date.
 
-## Can I connect a custom domain to my Lovable project?
 
-Yes, you can!
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+---
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## User Roles & Permissions
+
+| Role | Responsibilities |
+| --- | --- |
+| **Manager** | Records procurement, manages stock/prices, and can record sales.
+
+ |
+| **Sales Agent** | Records sales and credit transactions; strictly prohibited from entering procurement.
+
+ |
+| **Director** | Authorized only to view aggregated sales totals and summaries across all branches.
+
+ |
+
+---
+
+## Business Rules
+
+* 
+**Pricing**: Sales prices are pre-set by the manager and pre-populated for agents.
+
+
+* 
+**Branch Access**: Agents record sales only at their respective assigned branch.
+
+
+* 
+**Role Integrity**: No sales agent is allowed to record any produce entry/procurement.
+
+
+
+---
+
+## Technical Stack
+
+* 
+**Frontend**: HTML, CSS, JavaScript.
+
+
+* 
+**Backend**: Node.js (Express.js).
+
+
+* 
+**Database**: MongoDB.
+
+
+
+## Project Constraints
+
+* 
+**Duration**: The project is designed to be implemented individually over 6 weeks.
+
+
+* 
+**Accessibility**: The solution must be a web-based system accessible via modern browsers.
+
