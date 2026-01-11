@@ -2,9 +2,18 @@ import { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { mockCreditSales } from '@/data/mockData';
 import { Button } from '@/components/ui/button';
-import { CreditCard, Plus, Calendar, User, Phone, MapPin, AlertCircle } from 'lucide-react';
+import { CreditCard, Plus, Calendar, User, Phone, MapPin, AlertCircle, Download, FileText, FileSpreadsheet } from 'lucide-react';
 import { format, differenceInDays } from 'date-fns';
 import { cn } from '@/lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
+import { exportCreditSalesToPDF, exportCreditSalesToCSV } from '@/utils/exportUtils';
+import { toast } from 'sonner';
 
 const CreditSales = () => {
   const [showForm, setShowForm] = useState(false);
@@ -24,6 +33,15 @@ const CreditSales = () => {
     return { label: 'Active', color: 'bg-karibu-green-100 text-karibu-green-600' };
   };
 
+  const handleExport = (format: 'pdf' | 'csv') => {
+    try {
+      format === 'pdf' ? exportCreditSalesToPDF(mockCreditSales) : exportCreditSalesToCSV(mockCreditSales);
+      toast.success(`Credit sales report exported as ${format.toUpperCase()}!`);
+    } catch (error) {
+      toast.error('Failed to export. Please try again.');
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -35,10 +53,33 @@ const CreditSales = () => {
               Manage deferred payments for trusted buyers
             </p>
           </div>
-          <Button variant="hero" size="lg" onClick={() => setShowForm(true)}>
-            <Plus className="h-5 w-5" />
-            New Credit Sale
-          </Button>
+          <div className="flex gap-3">
+            {/* Export Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="lg" className="gap-2">
+                  <Download className="h-5 w-5" />
+                  Export
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => handleExport('pdf')} className="gap-2">
+                  <FileText className="h-4 w-4" />
+                  Export as PDF
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => handleExport('csv')} className="gap-2">
+                  <FileSpreadsheet className="h-4 w-4" />
+                  Export as CSV
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
+            <Button variant="hero" size="lg" onClick={() => setShowForm(true)}>
+              <Plus className="h-5 w-5" />
+              New Credit Sale
+            </Button>
+          </div>
         </div>
 
         {/* Summary Cards */}
